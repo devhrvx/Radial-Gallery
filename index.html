@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100..900&family=New+Amsterdam&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+    <title>Radial Gallery | JJK</title>
+</head>
+<body>
+    <nav>
+        <p>Jujutsu Kaisen</p>
+        <p>Sorcerers</p>
+    </nav>
+    <div class="container">
+        <div class="gallery">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"></script>
+    <script>
+        const items = document.querySelectorAll('.item');
+        const container = document.querySelector('.container');
+        const itemCount = items.length;
+        const angleIncrement = (2 * Math.PI) / itemCount;
+        const radius = 300;
+        let galleryOpen = false;
+
+        const centerX = container.offsetWidth / 2;
+        const centerY = container.offsetHeight / 2;
+
+        const tl = gsap.timeline();
+
+        items.forEach(function(item, index){
+            const img = document.createElement('img');
+            img.src = 'res/img' + (index + 1) + '.jpg';
+            item.appendChild(img);
+
+            const angle = index * angleIncrement;
+            const initialRotation = (angle * 180 / Math.PI) - 90;
+            const x = centerX + radius * Math.cos(angle);
+            const y =centerY + radius * Math.sin(angle);
+
+            gsap.set(item, {scale: 0});
+            tl.to(item, {
+                left: x + 'px',
+                top: y + 'px',
+                rotation: initialRotation,
+                scale: 1,
+                duration: 1,
+                ease: "power2.out",
+                delay: 1
+            }, index * 0.1);
+
+            item.addEventListener('click', function () {
+                if (!galleryOpen) {
+                    galleryOpen = true;
+
+                    const ducplicate = item.cloneNode(true);
+                    ducplicate.style.position = 'absolute';
+                    container.appendChild(ducplicate);
+
+                    gsap.to(Array.from(items).filter(i => i != item), {
+                        scale: 0,
+                        duration: 0.5,
+                        ease: "power2.in",
+                        stagger: 0.05
+                    });
+
+                    const endRotation = initialRotation > 180 ? initialRotation - 360 : initialRotation;
+
+                    gsap.to([item])
+                }
+            });
+        });
+    </script>
+</body>
+</html>
