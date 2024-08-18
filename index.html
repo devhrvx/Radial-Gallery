@@ -24,6 +24,7 @@
             <div class="item"></div>
             <div class="item"></div>
             <div class="item"></div>
+            <div class="item"></div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"></script>
@@ -65,9 +66,9 @@
                 if (!galleryOpen) {
                     galleryOpen = true;
 
-                    const ducplicate = item.cloneNode(true);
-                    ducplicate.style.position = 'absolute';
-                    container.appendChild(ducplicate);
+                    const duplicate = item.cloneNode(true);
+                    duplicate.style.position = 'absolute';
+                    container.appendChild(duplicate);
 
                     gsap.to(Array.from(items).filter(i => i != item), {
                         scale: 0,
@@ -78,7 +79,43 @@
 
                     const endRotation = initialRotation > 180 ? initialRotation - 360 : initialRotation;
 
-                    gsap.to([item])
+                    gsap.to([item, duplicate], {
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%) scale(4)',
+                        duration: 1,
+                        ease: "power2.out",
+                        delay: 1.25
+                    });
+
+                    const closeGallery = function() {
+                        if(galleryOpen) {
+                            gsap.to([item, duplicate], {
+                                left: x + 'px',
+                                top: y + 'px',
+                                rotation: initialRotation,
+                                scale: 1,
+                                duration: 1,
+                                ease: "power2.out",
+                                onComplete: function() {
+                                    duplicate.remove();
+                                    gsap.to(items, {
+                                        scale: 1,
+                                        duration: 1,
+                                        stagger: 0.05,
+                                        ease: "power2.out"
+                                    });
+                                    
+                                    galleryOpen= false;
+                                    
+                                }
+
+                            });
+                        }
+                    };
+
+                    item.addEventListener('click', closeGallery);
+                    duplicate.addEventListener('click', closeGallery);
                 }
             });
         });

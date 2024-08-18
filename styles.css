@@ -8,6 +8,8 @@ html, body {
     width: 100%;
     height: 100%;
     font-family: 'New Amsterdam', sans-serif;
+    color: rgb(0, 0, 0);
+    background-color: #ececec;
 }
 
 nav {
@@ -21,6 +23,7 @@ nav {
 
 .container {
     position: relative;
+    display: inline-block;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -31,10 +34,14 @@ nav {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    background-color: #9b9b9b;
-    width: 80px;
-    height: 140px;
+    background-color: #5e91b09a;
+    width: 100px;
+    height: 160px;
     margin: 10px;
+}
+
+p {
+    font-size: 30px;
 }
 
 img {
